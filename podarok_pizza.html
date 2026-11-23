@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#171323">
+<title>Небольшой сюрприз ✦</title>
+<style>
+:root{
+  --bg:#171323; --panel:#211a30; --cream:#fff4e8; --muted:#c5b8d2;
+  --lav:#c9a7ff; --pink:#ffb7c9; --peach:#ffc99f; --mint:#a9e6d3;
+}
+*{box-sizing:border-box}
+html{min-height:100%;background:var(--bg)}
+body{
+  margin:0; min-height:100svh; color:var(--cream);
+  font-family: ui-rounded, "SF Pro Rounded", "Segoe UI", system-ui, sans-serif;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(143,101,190,.26), transparent 45%),
+    radial-gradient(ellipse at 100% 70%, rgba(255,183,201,.10), transparent 38%),
+    var(--bg);
+  overflow-x:hidden;
+}
+
+.starfield{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.star{
+  position:absolute;width:3px;height:3px;border-radius:50%;background:#fff0d9;
+  opacity:0;box-shadow:0 0 9px 2px rgba(226,196,255,.75);
+  animation:twinkle var(--duration) ease-in-out infinite;
+  animation-delay:var(--delay)
+}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.55)}50%{opacity:.85;transform:scale(1.35)}}
+.reveal-flash{
+  position:fixed;inset:0;z-index:20;pointer-events:none;opacity:0;
+  background:radial-gradient(circle at 50% 45%,rgba(255,239,218,.95),rgba(218,179,255,.38) 28%,transparent 68%);
+}
+.reveal-flash.burst{animation:flash .95s ease-out forwards}
+@keyframes flash{0%{opacity:0;transform:scale(.55)}22%{opacity:.95}100%{opacity:0;transform:scale(1.5)}}
+body:before,body:after{
+  content:"";position:fixed;width:190px;height:190px;border-radius:50%;
+  filter:blur(65px);opacity:.22;pointer-events:none;z-index:0;
+}
+body:before{background:#9e6ad7;top:18%;left:-110px}
+body:after{background:#e98aa9;right:-120px;bottom:8%}
+main{position:relative;z-index:1;width:min(100%,480px);margin:0 auto;padding:calc(28px + env(safe-area-inset-top)) 22px calc(34px + env(safe-area-inset-bottom))}
+.topline{display:flex;align-items:center;justify-content:center;gap:9px;color:#d8c8e8;font-size:11px;letter-spacing:.19em;text-transform:uppercase}
+.spark{color:var(--peach);font-size:16px}
+.hero{text-align:center;margin:36px 0 22px}
+.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);font-weight:700}
+h1{font-size:clamp(34px,10vw,48px);line-height:.99;letter-spacing:-.055em;margin:14px 0 13px;font-weight:850}
+h1 span{color:var(--lav);font-family:Georgia,serif;font-style:italic;font-weight:500}
+.lead{font-size:15px;line-height:1.55;color:var(--muted);max-width:300px;margin:0 auto}
+.game-card{
+  border:1px solid rgba(255,255,255,.12);border-radius:28px;padding:20px 15px 18px;
+  background:linear-gradient(155deg,rgba(255,255,255,.095),rgba(255,255,255,.025));
+  box-shadow:0 24px 70px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.10);
+  backdrop-filter:blur(14px);
+}
+
+.wheel-wrap{
+ width:min(78vw,310px);aspect-ratio:1;margin:4px auto 18px;position:relative;
+ filter:drop-shadow(0 12px 20px rgba(0,0,0,.35));
+ transition:filter .35s ease,transform .35s ease;
+}
+.wheel-wrap:after{
+ content:"";position:absolute;inset:4%;border-radius:50%;pointer-events:none;
+ box-shadow:0 0 0 0 rgba(211,178,255,0);
+ transition:box-shadow .35s ease;
+}
+.wheel-wrap.glowing{filter:drop-shadow(0 0 12px rgba(220,185,255,.8)) drop-shadow(0 0 32px rgba(255,190,210,.38))}
+.wheel-wrap.glowing:after{box-shadow:0 0 28px 9px rgba(211,178,255,.32),inset 0 0 22px rgba(255,255,255,.18)}
+.wheel-wrap.spinning-glow{animation:wheelPulse .9s ease-in-out infinite alternate}
+@keyframes wheelPulse{from{transform:scale(1);filter:drop-shadow(0 0 9px rgba(220,185,255,.55))}to{transform:scale(1.018);filter:drop-shadow(0 0 23px rgba(255,190,210,.75))}}
+
+canvas{width:100%;height:100%;display:block}
+.pointer{
+ position:absolute;z-index:3;top:-8px;left:50%;transform:translateX(-50%);
+ width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;
+ border-top:30px solid var(--cream);filter:drop-shadow(0 3px 4px rgba(0,0,0,.45))
+}
+.hub{
+ position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ width:67px;height:67px;border-radius:50%;display:grid;place-items:center;
+ background:linear-gradient(145deg,#fff0e4,#d8b8ff);color:#2a2036;
+ border:5px solid #fff8f1;box-shadow:0 4px 18px rgba(0,0,0,.3);
+ font-size:25px;font-weight:900
+}
+.instruction{text-align:center;color:#d6c9df;font-size:12px;letter-spacing:.04em;margin:4px 0 14px}
+button{
+ border:0;cursor:pointer;font:inherit;-webkit-tap-highlight-color:transparent;
+}
+.spin{
+ width:100%;min-height:58px;border-radius:18px;color:#241b30;font-weight:850;
+ font-size:15px;letter-spacing:.08em;text-transform:uppercase;
+ background:linear-gradient(100deg,#ffd0b0,#f5b8d0 52%,#cdb2ff);
+ box-shadow:0 8px 24px rgba(205,178,255,.2),inset 0 1px 0 rgba(255,255,255,.8);
+ transition:transform .18s,filter .18s;
+}
+.spin:active{transform:scale(.98);filter:brightness(1.08)}
+.spin:disabled{opacity:.7;cursor:default}
+.small-note{text-align:center;color:#a99bb7;font-size:11px;margin:12px 0 0}
+.reveal{display:none;margin-top:20px;animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+.reveal.show{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.ticket{
+ position:relative;overflow:hidden;border-radius:24px;padding:23px 20px 20px;
+ color:#261d31;background:linear-gradient(145deg,#fff3e7,#f5d9e8 55%,#d9c8fa);
+ box-shadow:0 18px 50px rgba(0,0,0,.25);
+}
+.ticket:before,.ticket:after{content:"";position:absolute;width:28px;height:28px;border-radius:50%;background:var(--bg);top:58%;transform:translateY(-50%)}
+.ticket:before{left:-15px}.ticket:after{right:-15px}
+.ticket-top{display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#76647e}
+
+.ticket h2{
+ font-size:52px;line-height:.9;letter-spacing:-.07em;margin:22px 0 8px;font-weight:950;
+ position:relative;width:max-content;max-width:100%;
+ background:linear-gradient(100deg,#32223e 5%,#8d5ca4 35%,#34223e 55%,#a56d87 78%,#32223e 95%);
+ background-size:220% auto;-webkit-background-clip:text;background-clip:text;color:transparent;
+ animation:logoShine 3.4s ease-in-out 1 both;
+}
+.ticket h2:after{
+ content:"";position:absolute;inset:-12px -18px;z-index:-1;border-radius:18px;
+ background:radial-gradient(ellipse,rgba(255,255,255,.8),rgba(255,255,255,0) 68%);
+ filter:blur(13px);opacity:0;animation:logoGlow 1.3s ease-out .25s both;
+}
+@keyframes logoShine{0%{background-position:100% center;filter:brightness(.75)}55%{filter:brightness(1.3)}100%{background-position:-120% center;filter:brightness(1)}}
+@keyframes logoGlow{0%{opacity:0;transform:scale(.7)}35%{opacity:1;transform:scale(1.12)}100%{opacity:.2;transform:scale(1.4)}}
+
+.ticket .sub{font-family:Georgia,serif;font-size:18px;font-style:italic;color:#745b83}
+.ticket-rule{border-top:1px dashed rgba(65,44,75,.35);margin:20px 0 16px}
+.details{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.detail-label{font-size:9px;text-transform:uppercase;letter-spacing:.13em;color:#806d83;margin-bottom:5px}
+.detail-value{font-size:14px;font-weight:800;line-height:1.3}
+.place{grid-column:1/-1}
+.ticket-foot{display:flex;align-items:center;justify-content:space-between;margin-top:20px;color:#806d83;font-size:10px;letter-spacing:.08em}
+.stubs{display:flex;gap:8px;margin-top:13px}
+.stub{flex:1;text-align:center;padding:11px 8px;border:1px solid rgba(75,52,85,.22);border-radius:12px;font-size:11px;font-weight:800;color:#4a3656}
+.ticket-actions{display:grid;gap:9px;margin-top:14px}
+.ticket-link{
+ display:flex;justify-content:center;align-items:center;min-height:52px;border-radius:15px;
+ background:#fff5ec;color:#2b2035;text-decoration:none;font-size:13px;font-weight:850;
+ border:1px solid rgba(255,255,255,.35)
+}
+.ticket-link.secondary{background:rgba(255,255,255,.10);color:#f7eefa;border:1px solid rgba(255,255,255,.2)}
+.message{text-align:center;color:#d9cce3;font-size:14px;line-height:1.6;margin:18px 8px 4px}
+.message strong{color:#ffd0b0}
+.footer{text-align:center;color:#887a96;font-size:10px;letter-spacing:.1em;margin-top:28px}
+.confetti{position:fixed;top:-15px;width:8px;height:13px;z-index:10;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translate3d(var(--drift),110svh,0) rotate(760deg);opacity:.9}}
+.hidden{display:none!important}
+@media (max-height:740px){.hero{margin:23px 0 17px}h1{font-size:36px}.wheel-wrap{width:min(70vw,270px)}main{padding-top:20px}}
+</style>
+</head>
+<body>
+<div class="starfield" aria-hidden="true"></div>
+<div class="reveal-flash" aria-hidden="true"></div>
+<main>
+  <div class="topline"><span class="spark">✦</span> маленький повод для радости <span class="spark">✦</span></div>
+  <section class="hero" id="intro">
+    <div class="eyebrow">специально для тебя</div>
+    <h1>А что сегодня<br><span>выпадет?</span></h1>
+    <p class="lead">Кажется, удача приготовила для тебя кое-что особенное. Проверим?</p>
+  </section>
+
+  <section class="game-card" id="game">
+    <div class="wheel-wrap">
+      <div class="pointer"></div>
+      <canvas id="wheel" width="700" height="700" aria-label="Колесо удачи"></canvas>
+      <div class="hub">✦</div>
+    </div>
+    <p class="instruction" id="instruction">Сделай вдох, загадай желание и нажми на кнопку</p>
+    <button class="spin" id="spin">Крутить удачу ✨</button>
+    <p class="small-note" id="smallNote">Предупреждаем: возможны внезапные улыбки</p>
+  </section>
+
+  <section class="reveal" id="reveal">
+    <div class="ticket">
+      <div class="ticket-top"><span>твой счастливый билет</span><span>№ 016 · 2027</span></div>
+      <h2>PIZZA</h2>
+      <div class="sub">большой сольный концерт</div>
+      <div class="ticket-rule"></div>
+      <div class="details">
+        <div><div class="detail-label">Дата</div><div class="detail-value">16 января<br>2027 · суббота</div></div>
+        <div><div class="detail-label">Начало</div><div class="detail-value">19:00</div></div>
+        <div class="place"><div class="detail-label">Место</div><div class="detail-value">МТС Live Холл<br>Нижний Новгород</div></div>
+      </div>
+      <div class="ticket-foot"><span>ДВА БИЛЕТА · ОДИН ВЕЧЕР</span><span>✦ ✦ ✦</span></div>
+      <div class="stubs"><div class="stub">БИЛЕТ 01</div><div class="stub">БИЛЕТ 02</div></div>
+    </div>
+    <p class="message">Вот такой вот сюрприз!<br><strong>Тебя ждёт вечер любимой музыки.</strong><br>Пусть будет много песен, улыбок и классных впечатлений ❤️</p>
+    <div class="ticket-actions">
+      <!-- Положи электронные билеты рядом с этим HTML-файлом и назови их ticket-1.pdf и ticket-2.pdf -->
+      <a class="ticket-link" href="ticket-1.pdf" target="_blank" rel="noopener">Открыть билет № 1 ↗</a>
+      <a class="ticket-link secondary" href="ticket-2.pdf" target="_blank" rel="noopener">Открыть билет № 2 ↗</a>
+    </div>
+  </section>
+  <div class="footer">СДЕЛАНО С ТЕПЛОМ · ДЛЯ ХОРОШЕГО ВЕЧЕРА</div>
+</main>
+<script>
+const canvas=document.getElementById('wheel'),ctx=canvas.getContext('2d');
+const labels=['Кофе и десерт','Небольшое чудо','Выходной режим','Сюрприз!','Улыбка дня','???'];
+const colors=['#d6b9ff','#ffd0b0','#f6b8cc','#b7e7d7','#c4b4f3','#ffe2a8'];
+const N=labels.length, arc=Math.PI*2/N, center=350, radius=326;
+let rotation=0, spinning=false;
+function drawWheel(){
+ ctx.clearRect(0,0,700,700);
+ ctx.save();ctx.translate(center,center);ctx.rotate(rotation);
+ for(let i=0;i<N;i++){
+   const start=-Math.PI/2+i*arc, end=start+arc;
+   ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,radius,start,end);ctx.closePath();
+   ctx.fillStyle=colors[i];ctx.fill();
+   ctx.strokeStyle='rgba(255,255,255,.85)';ctx.lineWidth=5;ctx.stroke();
+   ctx.save();ctx.rotate(start+arc/2);
+   ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#382a43';
+   ctx.font='700 24px system-ui, sans-serif';
+   const words=labels[i].split(' ');
+   if(words.length>1){ctx.fillText(words.slice(0,Math.ceil(words.length/2)).join(' '),205,-13);ctx.fillText(words.slice(Math.ceil(words.length/2)).join(' '),205,17)}
+   else ctx.fillText(labels[i],205,0);
+   ctx.restore();
+ }
+ ctx.beginPath();ctx.arc(0,0,radius,0,Math.PI*2);ctx.strokeStyle='rgba(255,255,255,.8)';ctx.lineWidth=13;ctx.stroke();
+ ctx.restore();
+}
+drawWheel();
+const starfield=document.querySelector('.starfield');
+for(let i=0;i<34;i++){
+ const star=document.createElement('i');star.className='star';
+ star.style.left=(Math.random()*100)+'%';
+ star.style.top=(Math.random()*100)+'%';
+ star.style.setProperty('--duration',(2.2+Math.random()*4.2)+'s');
+ star.style.setProperty('--delay',(-Math.random()*5)+'s');
+ if(i%5===0){star.style.width='4px';star.style.height='4px'}
+ starfield.appendChild(star);
+}
+const spin=document.getElementById('spin');
+spin.addEventListener('click',()=>{
+ if(spinning)return;spinning=true;spin.disabled=true;
+ document.querySelector('.wheel-wrap').classList.add('glowing','spinning-glow');
+ if('vibrate' in navigator){try{navigator.vibrate([35,25,35]);}catch(e){}}
+ document.getElementById('instruction').textContent='Удача уже в пути…';
+ document.getElementById('smallNote').textContent='Кажется, происходит что-то хорошее';
+ // Target the "???" sector under the pointer, with several full rotations.
+ const targetIndex=5;
+ const currentNorm=((rotation%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+ const targetNorm=((Math.PI*2-(targetIndex+.5)*arc)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
+ let delta=(targetNorm-currentNorm+Math.PI*2)%(Math.PI*2);
+ const total=delta+Math.PI*2*6;
+ const start=rotation, duration=5100, startTime=performance.now();
+ function animate(now){
+   const t=Math.min(1,(now-startTime)/duration);
+   const ease=1-Math.pow(1-t,5);
+   rotation=start+total*ease;drawWheel();
+   if(t<1)requestAnimationFrame(animate);
+   else{
+     rotation=((rotation%(Math.PI*2))+Math.PI*2)%(Math.PI*2);drawWheel();
+     document.querySelector('.wheel-wrap').classList.remove('spinning-glow');
+     document.querySelector('.wheel-wrap').classList.add('glowing');
+     if('vibrate' in navigator){try{navigator.vibrate([70,35,110]);}catch(e){}}
+     document.getElementById('instruction').textContent='Так-так… кажется, это оно!';
+     spin.textContent='Подарок найден ✓';
+     setTimeout(()=>{
+       document.getElementById('game').classList.add('hidden');
+       document.getElementById('intro').classList.add('hidden');
+       document.getElementById('reveal').classList.add('show');
+       document.querySelector('.reveal-flash').classList.add('burst');
+       document.querySelector('.footer').textContent='ТВОЙ ВЕЧЕР. ТВОЯ МУЗЫКА. ТВОЙ СЮРПРИЗ.';
+       confetti();
+       window.scrollTo({top:0,behavior:'smooth'});
+     },850);
+   }
+ }
+ requestAnimationFrame(animate);
+});
+function confetti(){
+ const palette=['#d6b9ff','#ffd0b0','#f6b8cc','#b7e7d7','#fff1d9'];
+ for(let i=0;i<90;i++){
+   const el=document.createElement('i');el.className='confetti';
+   el.style.left=Math.random()*100+'vw';el.style.background=palette[i%palette.length];
+   el.style.setProperty('--drift',(Math.random()*180-90)+'px');
+   el.style.animationDuration=(2.5+Math.random()*2.8)+'s';
+   el.style.animationDelay=(Math.random()*.8)+'s';
+   document.body.appendChild(el);setTimeout(()=>el.remove(),6500);
+ }
+}
+</script>
+</body>
+</html>
